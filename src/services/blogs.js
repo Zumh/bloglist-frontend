@@ -9,8 +9,13 @@ const setToken = newToken => {
 
 
 
+
 const getAll = () => {
-  const request = axios.get(baseUrl)
+
+  const request = axios.get(`${baseUrl}`, {
+    headers: { Authorization: token },  
+  }) 
+
   return request.then(response => response.data)
 }
 
