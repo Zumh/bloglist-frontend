@@ -1,4 +1,38 @@
-const CreateBlog = ({ addBlog, newBlog, setNewBlog }) => {
+import { useState } from 'react'
+import blogService from '../services/blogs'
+
+const CreateBlog = ({setMessage, setMessageStatus, setBlogs}) => {
+  const blogObject = {
+    title: '',
+    author: '',
+    url: '',
+  }
+  const [newBlog, setNewBlog] = useState({...blogObject}) // Object.assign({},blogObject)
+
+  const addBlog = (event) => {
+    event.preventDefault()
+    blogService
+      .create({...newBlog})
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        setNewBlog({...blogObject})
+        setMessage('A new blog added')
+        setMessageStatus('success')
+
+      }).catch(error => {
+        // set the error message and show for 5 seconds and then hide it
+        // also we reset the setError Message to null
+        setMessage(error.response.data.error)
+        setMessageStatus('error')
+      })
+
+    setTimeout(() => {
+      setMessage(null)
+      setMessageStatus(null)
+    }, 5000)
+
+  }
+
     return (
     <div>
     <h2>create new</h2>

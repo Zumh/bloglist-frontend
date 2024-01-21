@@ -8,18 +8,13 @@ import CreateBlog from './components/CreateBlog'
 
 
 const App = () => {
-  const blogObject = {
-    title: '',
-    author: '',
-    url: '',
-  }
+  
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState({...blogObject}) // Object.assign({},blogObject)
+
 
   const [message, setMessage] = useState(null)
   const [messageStatus, setMessageStatus] = useState(null)
 
-  const [showAll, setShowAll] = useState(null)
 
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
@@ -51,35 +46,6 @@ const App = () => {
 
 
  
-
-  const addBlog = (event) => {
-    event.preventDefault()
-    blogService
-      .create({...newBlog})
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        setNewBlog({...blogObject})
-        setMessage('A new blog added')
-        setMessageStatus('success')
-
-      }).catch(error => {
-        // set the error message and show for 5 seconds and then hide it
-        // also we reset the setError Message to null
-        setMessage(error.response.data.error)
-        setMessageStatus('error')
-      })
-
-    setTimeout(() => {
-      setMessage(null)
-      setMessageStatus(null)
-    }, 5000)
-
-  }
-
-  const handleBlogChange = (event) => {
-    setNewBlog(event.target.value)
-  }
-
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -164,7 +130,7 @@ const blogForm = () => {
       <button onClick={() => setCreateVisibility(true)}>create new</button>
     </div>
     <div style={showWhenVisible}>
-      <CreateBlog addBlog={addBlog} newBlog={newBlog} setNewBlog={setNewBlog} />
+      <CreateBlog setMessage={setMessage} setMessageStatus={setMessageStatus} setBlogs={setBlogs}/>
     </div>
     <button onClick={() => setCreateVisibility(false)}>cancel</button>
     
