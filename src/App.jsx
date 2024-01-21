@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import Footer from './components/Footer'
 import Notification from './components/Notification'
+import CreateBlog from './components/CreateBlog'
 
 
 const App = () => {
@@ -23,6 +24,8 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  const [createVisibility, setCreateVisibility] = useState(false)
 
 
    // store user details in local storage only if user is logged in
@@ -152,39 +155,26 @@ const App = () => {
  )
   
  // blogForm
-const blogForm = () => (
+const blogForm = () => {
+  const showWhenVisible = { display: createVisibility ? '' : 'none' }
+  const hideWhenVisible = { display: createVisibility ? 'none' : '' }
 
-  <div>
-  
-    <h2>create new</h2>
-    <form onSubmit={addBlog}>
-      title: <input
-        type="text" 
-        value={newBlog.title}
-        onChange={({ target }) => setNewBlog({...newBlog, title: target.value})}
-      />
-      <br/>
-      author: <input 
-        type="text"
-        value={newBlog.author}
-        onChange={({ target }) => setNewBlog({...newBlog, author: target.value})}
-      />
-      <br/>
-      url: <input 
-        type="text"
-        value={newBlog.url}
-        onChange={({ target }) => setNewBlog({...newBlog, url: target.value})}
-      />
-      <br/>
-      <button type='submit'>create</button>
-    </form>
+  return (<div>
+    <div style={hideWhenVisible}>
+      <button onClick={() => setCreateVisibility(true)}>create new</button>
+    </div>
+    <div style={showWhenVisible}>
+      <CreateBlog addBlog={addBlog} newBlog={newBlog} setNewBlog={setNewBlog} />
+    </div>
+    <button onClick={() => setCreateVisibility(false)}>cancel</button>
+    
       <ul>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
     </ul>
-  </div>
-)
+  </div>)
+}
 
 
 
