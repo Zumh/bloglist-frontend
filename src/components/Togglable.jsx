@@ -1,6 +1,7 @@
 import { useState, forwardRef, useImperativeHandle } from 'react'
+import PropTypes from 'prop-types'
 /*
-The function that creates the component is wrapped inside of a forwardRef function call. 
+The function that creates the component is wrapped inside of a forwardRef function call.
 This way the component can access the ref that is assigned to it.
  */
 const Togglable = forwardRef((props, refs) => {
@@ -13,7 +14,7 @@ const Togglable = forwardRef((props, refs) => {
     setVisible(!visible)
   }
 
-  // The component uses the useImperativeHandle hook to make 
+  // The component uses the useImperativeHandle hook to make
   // its toggleVisibility function available outside of the component.
   useImperativeHandle(refs, () => {
     return {
@@ -33,5 +34,11 @@ const Togglable = forwardRef((props, refs) => {
     </div>
   )
 })
+
+Togglable.displayName = 'Togglable'
+Togglable.propTypes = {
+  visible: PropTypes.string.isRequired,
+  hide: PropTypes.string.isRequired
+}
 
 export default Togglable

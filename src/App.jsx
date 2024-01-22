@@ -10,7 +10,7 @@ import Togglable from './components/Togglable'
 
 
 const App = () => {
-  
+
   const [blogs, setBlogs] = useState([])
 
   const [message, setMessage] = useState(null)
@@ -20,7 +20,7 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-   // store user details in local storage only if user is logged in
+  // store user details in local storage only if user is logged in
   // when we refresh the page the user will still be logged in
   // token must be set first before fetching blogs and token is in global variable not in a state
   // if the blogs state change the useEffect will run
@@ -31,13 +31,13 @@ const App = () => {
       setUser(user)
       blogService.setToken(user.token)
     }
-    
+
   }, [])
 
   useEffect(() => {
     if (user) {
- 
-      blogService.getAll().then(blogs =>{
+
+      blogService.getAll().then(blogs => {
         setBlogs( blogs )
       })
     }
@@ -73,21 +73,21 @@ const App = () => {
 
       blogService.getAll().then(blog =>
         setBlogs( blog )
-      )  
+      )
 
       setMessage('Login sucess!')
       setMessageStatus('success')
-    
+
     } catch(exception) {
       // set the error message and show for 5 seconds and then hide it
       // also we reset the setError Message to null
       setMessage(exception.response.data.error)
       setMessageStatus('error')
-    
+
     }
 
 
-    
+
   }
 
   const handleLogout = () => {
@@ -96,73 +96,73 @@ const App = () => {
   }
 
   // loginform
- const loginForm = () => (
-  <Login login={login} />
- )
-  
- const createBlog = (newBlog) => {
-  // it hide my create blog form after adding a new blog
-  blogFormRef.current.toggleVisibility()
-  blogService
-    .create({ ...newBlog})
-    .then(returnedBlog => {
-      setBlogs(blogs.concat(returnedBlog))
-      setMessage('A new blog added')
-      setMessageStatus('success')
+  const loginForm = () => (
+    <Login login={login} />
+  )
 
-    }).catch(error => {
+  const createBlog = (newBlog) => {
+  // it hide my create blog form after adding a new blog
+    blogFormRef.current.toggleVisibility()
+    blogService
+      .create({ ...newBlog })
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        setMessage('A new blog added')
+        setMessageStatus('success')
+
+      }).catch(error => {
       // set the error message and show for 5 seconds and then hide it
       // also we reset the setError Message to null
-      setMessage(error.response? error.response.data.error:"Cannot add blog")
-      setMessageStatus('error')
-    })
+        setMessage(error.response? error.response.data.error:'Cannot add blog')
+        setMessageStatus('error')
+      })
 
- }
- 
- const updatedLikesLocally = (id) => {
-  setBlogs(blogs.map(blog => blog.id !== id ? blog : { ...blog, likes: blog.likes + 1 }))
- }
+  }
 
- const removeBlogLocally = (id) => {
-  setBlogs(blogs.filter(blog => blog.id !== id))
- }
+  const updatedLikesLocally = (id) => {
+    setBlogs(blogs.map(blog => blog.id !== id ? blog : { ...blog, likes: blog.likes + 1 }))
+  }
 
- // blogForm
-const blogForm = () => (
-  <div>
-  <Togglable ref={blogFormRef} visible='create new' hide='cancel' >
-    <BlogForm createBlog={createBlog}/>
-  </Togglable>
-  
-    <ul>
-       {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-         <Blog key={blog.id} 
-         blog={blog} 
-         name={user.name} 
-         setMessage={setMessage} 
-         setMessageStatus={setMessageStatus} 
-         updatedLikesLocally={updatedLikesLocally} 
-         removeBlogLocally={removeBlogLocally}
-         />
+  const removeBlogLocally = (id) => {
+    setBlogs(blogs.filter(blog => blog.id !== id))
+  }
 
-        
-       )}
-     </ul>
+  // blogForm
+  const blogForm = () => (
+    <div>
+      <Togglable ref={blogFormRef} visible='create new' hide='cancel' >
+        <BlogForm createBlog={createBlog}/>
+      </Togglable>
+
+      <ul>
+        {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
+          <Blog key={blog.id}
+            blog={blog}
+            name={user.name}
+            setMessage={setMessage}
+            setMessageStatus={setMessageStatus}
+            updatedLikesLocally={updatedLikesLocally}
+            removeBlogLocally={removeBlogLocally}
+          />
+
+
+        )}
+      </ul>
 
     </div>
 
-)
+  )
 
-// App component returns JSX
+  // App component returns JSX
   return (
     <div>
       <h1>Blogs</h1>
       <Notification message={message} messageStatus={messageStatus} />
-  
+
       {!user && loginForm()}
       {user && <div> <p>{user.name} logged in <button  onClick={() => handleLogout()}>logout</button></p> {blogForm()}</div>}
 
-     <Footer />
+      <Footer />
     </div>
   )
 }

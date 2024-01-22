@@ -1,14 +1,14 @@
 import { useState } from 'react'
 
-const BlogForm = ({createBlog}) => {
+const BlogForm = ({ createBlog }) => {
   const blogObject = {
     title: '',
     author: '',
     url: '',
     name: '',
- 
+
   }
-  const [newBlog, setNewBlog] = useState({...blogObject}) // Object.assign({},blogObject)
+  const [newBlog, setNewBlog] = useState({ ...blogObject }) // Object.assign({},blogObject)
 
   const addBlog = (event) => {
     event.preventDefault()
@@ -17,35 +17,35 @@ const BlogForm = ({createBlog}) => {
       author: newBlog.author,
       url: newBlog.url
     })
-    setNewBlog({...blogObject})
+    setNewBlog({ ...blogObject })
   }
 
-    return (
+  return (
     <div>
-    <h2>create new</h2>
-    <form onSubmit={addBlog}>
+      <h2>create new</h2>
+      <form onSubmit={addBlog}>
       title: <input
-        type="text" 
-        value={newBlog.title}
-        onChange={({ target }) => setNewBlog({...newBlog, title: target.value})}
-      />
-      <br/>
-      author: <input 
-        type="text"
-        value={newBlog.author}
-        onChange={({ target }) => setNewBlog({...newBlog, author: target.value})}
-      />
-      <br/>
-      url: <input 
-        type="text"
-        value={newBlog.url}
-        onChange={({ target }) => setNewBlog({...newBlog, url: target.value})}
-      />
-      <br/>
-      <button type='submit'>create</button>
-    </form>
+          type="text"
+          value={newBlog.title}
+          onChange={({ target }) => setNewBlog({ ...newBlog, title: target.value })}
+        />
+        <br/>
+      author: <input
+          type="text"
+          value={newBlog.author}
+          onChange={({ target }) => setNewBlog({ ...newBlog, author: target.value })}
+        />
+        <br/>
+      url: <input
+          type="text"
+          value={newBlog.url}
+          onChange={({ target }) => setNewBlog({ ...newBlog, url: target.value })}
+        />
+        <br/>
+        <button type='submit'>create</button>
+      </form>
     </div>
-    )
-  }
+  )
+}
 
-  export default BlogForm
+export default BlogForm
