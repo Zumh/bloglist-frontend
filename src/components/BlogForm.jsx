@@ -5,6 +5,7 @@ const BlogForm = ({createBlog}) => {
     title: '',
     author: '',
     url: '',
+    name: '',
  
   }
   const [newBlog, setNewBlog] = useState({...blogObject}) // Object.assign({},blogObject)

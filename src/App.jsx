@@ -8,6 +8,7 @@ import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 
+
 const App = () => {
   
   const [blogs, setBlogs] = useState([])
@@ -29,11 +30,29 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       blogService.setToken(user.token)
-
-      blogService.getAll().then(blog =>
-      setBlogs( blog ))
     }
-  }, [blogs])
+    
+  }, [])
+
+  useEffect(() => {
+    if (user) {
+ 
+      blogService.getAll().then(blogs =>{
+        setBlogs( blogs )
+      })
+    }
+  },[user])
+
+  useEffect(() => {
+    if (message) {
+      setTimeout(() => {
+        setMessage(null)
+        setMessageStatus(null)
+      }, 5000)
+    }
+  }, [message])
+
+
 
   const login = async ({ username, password }) => {
 
@@ -67,10 +86,7 @@ const App = () => {
     
     }
 
-    setTimeout(() => {
-      setMessage(null)
-      setMessageStatus(null)
-    }, 5000)
+
     
   }
 
@@ -101,10 +117,14 @@ const App = () => {
       setMessageStatus('error')
     })
 
-  setTimeout(() => {
-    setMessage(null)
-    setMessageStatus(null)
-  }, 5000)
+ }
+ 
+ const updatedLikesLocally = (id) => {
+  setBlogs(blogs.map(blog => blog.id !== id ? blog : { ...blog, likes: blog.likes + 1 }))
+ }
+
+ const removeBlogLocally = (id) => {
+  setBlogs(blogs.filter(blog => blog.id !== id))
  }
 
  // blogForm
@@ -115,8 +135,16 @@ const blogForm = () => (
   </Togglable>
   
     <ul>
-       {blogs.map(blog =>
-         <Blog key={blog.id} blog={blog} />
+       {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
+         <Blog key={blog.id} 
+         blog={blog} 
+         name={user.name} 
+         setMessage={setMessage} 
+         setMessageStatus={setMessageStatus} 
+         updatedLikesLocally={updatedLikesLocally} 
+         removeBlogLocally={removeBlogLocally}
+         />
+
         
        )}
      </ul>
@@ -132,7 +160,7 @@ const blogForm = () => (
       <Notification message={message} messageStatus={messageStatus} />
   
       {!user && loginForm()}
-      {user && <div> <p>{user.name} logged in <button onClick={() => handleLogout()}>logout</button></p> {blogForm()}</div>}
+      {user && <div> <p>{user.name} logged in <button  onClick={() => handleLogout()}>logout</button></p> {blogForm()}</div>}
 
      <Footer />
     </div>
