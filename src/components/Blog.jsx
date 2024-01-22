@@ -1,7 +1,6 @@
 
 import { useState } from 'react'
 import blogService from '../services/blogs'
-import '../index.css'
 
 const Blog = ({ blog, name, setMessage, setMessageStatus, updatedLikesLocally,  removeBlogLocally }) => {
 
@@ -49,13 +48,27 @@ const Blog = ({ blog, name, setMessage, setMessageStatus, updatedLikesLocally,  
         })
     }
   }
+
+  const buttonStyle = {
+    backgroundColor: 'green', /* Green */
+    border: 'none',
+    color: 'white',
+    textAlign: 'center',
+    textDecoration: 'none',
+
+    fontSize: 16
+
+  }
+
   return (
     <div style={blogStyle}>
-      {blog.title} {blog.author}
-      <button className="viewButton" onClick={() => setDetailVisibility(!detailVisibility)}>{showOrHide}</button>
+      <li className='blog'>
+        {blog.title} {blog.author}
+      </li>
+      <button className="buttonStyle" onClick={() => setDetailVisibility(!detailVisibility)}>{showOrHide}</button>
       <div style={visibilityStyle}>
         <div>{blog.url}</div>
-        <div>likes {blog.likes} <button  className="likeButton" onClick={likeUpdate}>like</button></div>
+        <div>likes {blog.likes} <button  className="buttonStyle" onClick={likeUpdate}>like</button></div>
 
         <div>{name}</div>
         <button className="buttonStyle" onClick={removeBlog}>remove</button>
