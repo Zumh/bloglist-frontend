@@ -1,6 +1,5 @@
 
 import { useState } from 'react'
-import blogService from '../services/blogs'
 import '../index.css'
 
 const Blog = ({ blog, name, updatedLike,  removeBlog }) => {

@@ -6,17 +6,20 @@ import userEvent from '@testing-library/user-event'
 
 describe('<Blog />', () => {
   let container
+  const blog = {
+    author: 'Component testing is done with react-testing-library',
+    title: 'title01',
+    url: 'test.com',
+    likes: 0,
+    user: { name: 'tester' , username: 'tester1 username' }
+  }
+  const mockHandler = jest.fn()
+
 
   beforeEach(() => {
-    const blog = {
-      author: 'Component testing is done with react-testing-library',
-      title: 'title01',
-      url: 'test.com',
-      likes: 0
-    }
-
-    container = render(<Blog blog={blog} />).container
+    container = render(<Blog blog={blog} updatedLike={mockHandler} removeBlog={mockHandler}/>).container
   })
+
   /**
  * Make a test, which checks that the component displaying a blog renders the blog's title and author, but
  * does not render its URL or number of likes by default.
@@ -57,10 +60,8 @@ when the button controlling the shown details has been clicked.
     expect(blogLikes).toBeInTheDocument()
 
   })
-})
 
 
-describe('<Blog likes />', () => {
 
   /**
    * Make a test, which checks that the blog's URL and number of likes are shown when the button controlling the shown details has been clicked.
@@ -68,16 +69,8 @@ describe('<Blog likes />', () => {
   test('If the like button is clicked twice, props call twice', async () => {
     // blog require blog's id
 
-    const blog = {
-      author: 'Component testing is done with react-testing-library',
-      title: 'title01',
-      url: 'test.com',
-      likes: 0,
-      id: 1
-    }
+    
 
-    const mockHandler = jest.fn()
-    render(<Blog blog={blog} likeUpdate={mockHandler} />)
 
     const user = userEvent.setup()
     const button = screen.getByText('view')

@@ -119,9 +119,6 @@ const App = () => {
 
   }
 
-  // const updatedLikesLocally = (id) => {
-  //   setBlogs(blogs.map(blog => blog.id !== id ? blog : { ...blog, likes: blog.likes + 1 }))
-  // }
 
   const updatedLike = (blogId, modifiedBlog) => {
     blogService.update(blogId, modifiedBlog).then( () => {
@@ -135,10 +132,6 @@ const App = () => {
 
     })
   }
-
-  // const removeBlogLocally = (id) => {
-  //   setBlogs(blogs.filter(blog => blog.id !== id))
-  // }
 
   const removeBlog = (removedMessage, blogId) => {
     blogService
