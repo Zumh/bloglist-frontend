@@ -119,12 +119,42 @@ const App = () => {
 
   }
 
-  const updatedLikesLocally = (id) => {
-    setBlogs(blogs.map(blog => blog.id !== id ? blog : { ...blog, likes: blog.likes + 1 }))
+  // const updatedLikesLocally = (id) => {
+  //   setBlogs(blogs.map(blog => blog.id !== id ? blog : { ...blog, likes: blog.likes + 1 }))
+  // }
+
+  const updatedLike = (blogId, modifiedBlog) => {
+    blogService.update(blogId, modifiedBlog).then( () => {
+      // update blogs that was just liked
+      setBlogs(blogs.map(blog => blog.id !== blogId ? blog : { ...blog, likes: blog.likes + 1 }))
+
+
+    }).catch(error => {
+      setMessage(error.response.data.error)
+      setMessageStatus('error')
+
+    })
   }
 
-  const removeBlogLocally = (id) => {
-    setBlogs(blogs.filter(blog => blog.id !== id))
+  // const removeBlogLocally = (id) => {
+  //   setBlogs(blogs.filter(blog => blog.id !== id))
+  // }
+
+  const removeBlog = (removedMessage, blogId) => {
+    blogService
+      .remove(blogId)
+      .then(() => {
+        // remove blogs that was just deleted from blogs locally
+        setBlogs(blogs.filter(blog => blog.id !== blogId))
+        setMessage(removedMessage)
+        setMessageStatus('success')
+
+      })
+      .catch(error => {
+        setMessage(error.response.data.error)
+        setMessageStatus('error')
+
+      })
   }
 
   // blogForm
@@ -139,10 +169,8 @@ const App = () => {
           <Blog key={blog.id}
             blog={blog}
             name={user.name}
-            setMessage={setMessage}
-            setMessageStatus={setMessageStatus}
-            updatedLikesLocally={updatedLikesLocally}
-            removeBlogLocally={removeBlogLocally}
+            updatedLike={updatedLike}
+            removeBlog={removeBlog}
           />
 
 

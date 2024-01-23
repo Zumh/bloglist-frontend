@@ -14,6 +14,7 @@ describe('<Blog />', () => {
       url: 'test.com',
       likes: 0
     }
+
     container = render(<Blog blog={blog} />).container
   })
   /**
@@ -56,4 +57,38 @@ when the button controlling the shown details has been clicked.
     expect(blogLikes).toBeInTheDocument()
 
   })
+})
+
+
+describe('<Blog likes />', () => {
+
+  /**
+   * Make a test, which checks that the blog's URL and number of likes are shown when the button controlling the shown details has been clicked.
+   */
+  test('If the like button is clicked twice, props call twice', async () => {
+    // blog require blog's id
+
+    const blog = {
+      author: 'Component testing is done with react-testing-library',
+      title: 'title01',
+      url: 'test.com',
+      likes: 0,
+      id: 1
+    }
+
+    const mockHandler = jest.fn()
+    render(<Blog blog={blog} likeUpdate={mockHandler} />)
+
+    const user = userEvent.setup()
+    const button = screen.getByText('view')
+    await user.click(button)
+
+    const likeButton = screen.getByText('like')
+    await user.click(likeButton)
+    await user.click(likeButton)
+
+    expect(mockHandler.mock.calls).toHaveLength(2)
+
+  })
+
 })

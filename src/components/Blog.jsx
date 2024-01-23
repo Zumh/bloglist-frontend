@@ -3,7 +3,7 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import '../index.css'
 
-const Blog = ({ blog, name, setMessage, setMessageStatus, updatedLikesLocally,  removeBlogLocally }) => {
+const Blog = ({ blog, name, updatedLike,  removeBlog }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -15,42 +15,18 @@ const Blog = ({ blog, name, setMessage, setMessageStatus, updatedLikesLocally,  
   const [detailVisibility, setDetailVisibility] = useState(false)
   const showOrHide = detailVisibility ? 'hide' : 'view'
 
-
-  const likeUpdate = () => {
+  const handleLikeUpdate = async () => {
     const { id, ...updatedBlog } = blog
     const modifiedBlog = { ...updatedBlog, user: updatedBlog.user.id, likes: updatedBlog.likes + 1 }
-    blogService.update(blog.id, modifiedBlog).then( () => {
-      // update blogs that was just liked
-      updatedLikesLocally(blog.id)
 
-    }).catch(error => {
-      setMessage(error.response.data.error)
-      setMessageStatus('error')
-
-    })
+    updatedLike(id, modifiedBlog)
   }
 
-  const removeBlog = () => {
+  const handleRemoveBlog = async () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      blogService
-        .remove(blog.id)
-        .then(() => {
-          // remove blogs that was just deleted from blogs locally
-
-          removeBlogLocally(blog.id)
-          setMessage(`Removed blog ${blog.title} by ${blog.author}`)
-          setMessageStatus('success')
-
-        })
-        .catch(error => {
-          setMessage(error.response.data.error)
-          setMessageStatus('error')
-
-        })
+      removeBlog(`Removed blog ${blog.title} by ${blog.author}`, blog.id)
     }
   }
-
-
 
   return (
     <div style={blogStyle} className='blog'>
@@ -61,10 +37,10 @@ const Blog = ({ blog, name, setMessage, setMessageStatus, updatedLikesLocally,  
       {detailVisibility && (
         <div className='blogDetails'>
           <div className="blogUrl">{blog.url}</div>
-          <div className="blogLikes">likes {blog.likes} <button  className="likeButton" onClick={likeUpdate}>like</button></div>
+          <div className="blogLikes">likes {blog.likes} <button  className="likeButton" onClick={handleLikeUpdate}>like</button></div>
 
           <div>{name}</div>
-          <button className="buttonStyle" onClick={removeBlog}>remove</button>
+          <button className="buttonStyle" onClick={handleRemoveBlog}>remove</button>
         </div>
       )}
 
