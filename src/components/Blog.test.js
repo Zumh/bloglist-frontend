@@ -69,7 +69,7 @@ when the button controlling the shown details has been clicked.
   test('If the like button is clicked twice, props call twice', async () => {
     // blog require blog's id
 
-    
+
 
 
     const user = userEvent.setup()
