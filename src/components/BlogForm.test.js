@@ -10,29 +10,7 @@ that the form calls the event handler it received as props with the right detail
 when a new blog is created.
  we have title, author, url as input value.
 */
-// test('<BlogForm /> updates parent state and calls onSubmit', async () => {
-//   const createBlog = jest.fn()
-//   const user = userEvent.setup()
 
-//   render(<BlogForm createBlog={createBlog} />)
-
-//   const inputs = screen.getAllByRole('textbox')
-//   const sampleData = ['title', 'author', 'url']
-//   await user.type(inputs[0].title, sampleData[0])
-//   await user.type(inputs[0].author, sampleData[1])
-//   await user.type(inputs[0].url, sampleData[2])
-
-//   const sendButton = screen.getByText('create')
-//   //await user.type(inputs[0], 'testing a form...')
-//   await user.click(sendButton)
-//   console.log(createBlog.mock.calls)
-//   expect(createBlog.mock.calls).toHaveLength(1)
-
-//   //expect(createBlog.mock.calls[0][0].title).toBe('title')
-
-
-
-// })
 
 test('<BlogForm /> updates parent state and calls onSubmit', async () => {
   const createBlog = jest.fn()
