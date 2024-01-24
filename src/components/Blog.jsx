@@ -36,7 +36,7 @@ const Blog = ({ blog, name, updatedLike,  removeBlog }) => {
       {detailVisibility && (
         <div className='blogDetails'>
           <div className="blogUrl">{blog.url}</div>
-          <div className="blogLikes">likes {blog.likes} <button  className="likeButton" onClick={handleLikeUpdate}>like</button></div>
+          <div className="blogLikes">likes: {blog.likes} <button  className="likeButton" onClick={handleLikeUpdate}>like</button></div>
 
           <div>{name}</div>
           <button className="buttonStyle" onClick={handleRemoveBlog}>remove</button>
