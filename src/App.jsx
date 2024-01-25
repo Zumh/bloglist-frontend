@@ -12,7 +12,6 @@ import Togglable from './components/Togglable'
 const App = () => {
 
   const [blogs, setBlogs] = useState([])
-
   const [message, setMessage] = useState(null)
   const [messageStatus, setMessageStatus] = useState(null)
 
@@ -36,7 +35,6 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-
       blogService.getAll().then(blogs => {
         setBlogs( blogs )
       })
@@ -71,9 +69,7 @@ const App = () => {
       // we can use this info for other requests
       setUser(loginUser)
 
-      blogService.getAll().then(blog =>
-        setBlogs( blog )
-      )
+     
 
       setMessage('Login sucess!')
       setMessageStatus('success')
@@ -100,24 +96,25 @@ const App = () => {
     <Login login={login} />
   )
 
-  const createBlog = (newBlog) => {
-  // it hide my create blog form after adding a new blog
-    blogFormRef.current.toggleVisibility()
-    blogService
-      .create({ ...newBlog })
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        setMessage('A new blog added')
-        setMessageStatus('success')
-
-      }).catch(error => {
+  const createBlog = async (newBlog) => {
+    try {
+      const blog = await blogService.create(newBlog)
+   
+      setBlogs(blogs.concat(blog))
+      setMessage('A new blog added')
+      setMessageStatus('success')
+      blogFormRef.current.toggleVisibility()
+    } catch (exception) {
       // set the error message and show for 5 seconds and then hide it
       // also we reset the setError Message to null
-        setMessage(error.response? error.response.data.error:'Cannot add blog')
-        setMessageStatus('error')
-      })
+      setMessage(exception.response.data.error)
+      setMessageStatus('error')
+    }
 
   }
+
+
+
 
 
   const updatedLike = (blogId, modifiedBlog) => {
@@ -151,28 +148,34 @@ const App = () => {
   }
 
   // blogForm
-  const blogForm = () => (
-    <div>
-      <Togglable ref={blogFormRef} visible='create new' hide='cancel' >
-        <BlogForm createBlog={createBlog}/>
-      </Togglable>
+  const blogForm = () => {
+    blogs.sort((a, b) => b.likes - a.likes)
+    return (
+      <div>
+        <Togglable ref={blogFormRef} visible='create new' hide='cancel' >
+          <BlogForm createBlog={createBlog} />
+        </Togglable>
+        <div className="blogs">
+          <ul>
+            {blogs.map(blog => {
+              return <Blog key={blog.id}
+                blog={blog}
+                user={user}
+                updatedLike={updatedLike}
+                removeBlog={removeBlog}
 
-      <ul>
-        {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-          <Blog key={blog.id}
-            blog={blog}
-            name={user.name}
-            updatedLike={updatedLike}
-            removeBlog={removeBlog}
-          />
+              />
+            }
 
 
-        )}
-      </ul>
+            )}
+          </ul>
 
-    </div>
+        </div>
 
-  )
+      </div>)
+
+  }
 
   // App component returns JSX
   return (

@@ -44,3 +44,19 @@ Cypress.Commands.add('createBlog', ({ title, author, url }) => {
 
   cy.visit('http://localhost:5173')
 })
+
+
+// Create a command for creating new test user
+Cypress.Commands.add('createUser', ({ name, username, password }) => {
+  cy.request('POST', 'http://localhost:3001/api/users', {
+    name, username, password
+  })
+
+  cy.visit('http://localhost:5173')
+})
+
+// Create a command for logout
+Cypress.Commands.add('logout', () => {
+  localStorage.clear()
+  cy.visit('http://localhost:5173')
+})
