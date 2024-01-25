@@ -69,7 +69,7 @@ const App = () => {
       // we can use this info for other requests
       setUser(loginUser)
 
-     
+
 
       setMessage('Login sucess!')
       setMessageStatus('success')
@@ -99,7 +99,7 @@ const App = () => {
   const createBlog = async (newBlog) => {
     try {
       const blog = await blogService.create(newBlog)
-   
+
       setBlogs(blogs.concat(blog))
       setMessage('A new blog added')
       setMessageStatus('success')

@@ -11,6 +11,29 @@ describe('Blog app', function() {
     cy.visit('')
   })
 
+  it('Login form is shown', function() {
+    cy.contains('Blogs')
+    cy.contains('Blog app, Department of Computer Science, University of Helsinki 2024')
+
+  })
+
+  describe('Login', function() {
+    it('succeeds with correct credentials', function() {
+      cy.get('#username').type('Edsger')
+      cy.get('#password').type('johndoe')
+      cy.get('#login-btn').click()
+      cy.contains('Edsger W. Dijkstra logged in')
+    })
+
+    it('fails with wrong credentials', function() {
+      cy.get('#username').type('Edsger')
+      cy.get('#password').type('joe')
+      cy.get('#login-btn').click()
+      cy.get('.error').contains('invalid username or password')
+      cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)')
+    })
+  })
+
   describe('when logged in', function() {
 
     beforeEach(function() {
@@ -75,10 +98,16 @@ describe('Blog app', function() {
 
         cy.login({ username: 'user1', password: 'password1' })
 
+        cy.createBlog({ title: 'title4', author: 'author4', url: 'url4' })
+
         // get all the blog posts by user1 and check for remove button that created by the other user
         cy.contains('title1').parent().as('blogPost')
         cy.get('@blogPost').contains('view').click()
         cy.get('@blogPost').contains('remove').should('not.exist')
+
+        cy.contains('title4').parent().as('blogPost')
+        cy.get('@blogPost').contains('view').click()
+        cy.get('@blogPost').contains('remove').should('exist')
 
       })
       // Make a test for ensuring that the user who created a blog can delete it.
@@ -142,31 +171,6 @@ describe('Blog app', function() {
     })
 
   })
-
-  it('Login form is shown', function() {
-    cy.contains('Blogs')
-    cy.contains('Blog app, Department of Computer Science, University of Helsinki 2024')
-
-  })
-
-  describe('Login', function() {
-    it('succeeds with correct credentials', function() {
-      cy.get('#username').type('Edsger')
-      cy.get('#password').type('johndoe')
-      cy.get('#login-btn').click()
-      cy.contains('Edsger W. Dijkstra logged in')
-    })
-
-    it('fails with wrong credentials', function() {
-      cy.get('#username').type('Edsger')
-      cy.get('#password').type('joe')
-      cy.get('#login-btn').click()
-      cy.get('.error').contains('invalid username or password')
-      cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)')
-    })
-  })
-
-
 
 
 })
